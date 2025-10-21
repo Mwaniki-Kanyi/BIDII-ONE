@@ -24,3 +24,8 @@ jobs:
         run: |
           source venv/bin/activate
           python manage.py test --verbosity=2
+      - name: Test Coverage
+        run: |
+          source venv/bin/activate
+          coverage run manage.py test
+          coverage report -m
