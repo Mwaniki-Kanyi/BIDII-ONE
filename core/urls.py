@@ -25,5 +25,11 @@ urlpatterns = [
     path('projects/add/', views.ProjectCreateView.as_view(), name='project_add'),
     path('projects/<int:pk>/edit/', views.ProjectUpdateView.as_view(), name='project_edit'),
     path('projects/<int:pk>/delete/', views.ProjectDeleteView.as_view(), name='project_delete'),
+    # Invoice CRUD routes
+    path('invoices/', views.InvoiceListView.as_view(), name='invoice_list'),
+    path('invoices/add/', views.InvoiceCreateView.as_view(), name='invoice_add'),
+    path('invoices/<int:pk>/edit/', views.InvoiceUpdateView.as_view(), name='invoice_edit'),
+    path('invoices/<int:pk>/delete/', views.InvoiceDeleteView.as_view(), name='invoice_delete'),
+
 
 ]

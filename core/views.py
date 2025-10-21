@@ -10,7 +10,7 @@ from django.utils import timezone
 from datetime import date, timedelta
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .forms import CustomerForm, WorkerForm, EstimateForm, ProjectForm
+from .forms import CustomerForm, WorkerForm, EstimateForm, ProjectForm, InvoiceForm
 
 def home(request):
     return render(request, "core/home.html")
@@ -94,6 +94,37 @@ class ProjectDeleteView(DeleteView):
     model = Project
     template_name = 'core/project_confirm_delete.html'
     success_url = reverse_lazy('core:project_list')
+    
+    
+class InvoiceListView(ListView):
+    model = Invoice
+    template_name = 'core/invoice_list.html'
+    context_object_name = 'invoices'
+class InvoiceCreateView(CreateView):
+    model = Invoice
+    form_class = InvoiceForm
+    template_name = 'core/invoice_form.html'
+    success_url = reverse_lazy('core:invoice_list')
+class InvoiceUpdateView(UpdateView):
+    model = Invoice
+    form_class = InvoiceForm
+    template_name = 'core/invoice_form.html'
+    success_url = reverse_lazy('core:invoice_list')
+class InvoiceDeleteView(DeleteView):
+    model = Invoice
+    template_name = 'core/invoice_confirm_delete.html'
+    success_url = reverse_lazy('core:invoice_list')
+class InvoiceListView(ListView):
+    model = Invoice
+    template_name = 'core/invoice_list.html'
+    context_object_name = 'invoices'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['today'] = date.today()
+        return context
+
+
 
 
 def dashboard_plot(request):

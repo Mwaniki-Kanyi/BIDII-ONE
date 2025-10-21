@@ -3,6 +3,7 @@ from .models import Customer
 from .models import Worker
 from .models import Estimate
 from .models import Project
+from .models import Invoice
 
 class CustomerForm(forms.ModelForm):
     class Meta:
@@ -50,4 +51,17 @@ class ProjectForm(forms.ModelForm):
             'workers': forms.SelectMultiple(attrs={'class': 'form-select'}),
             'materials_ordered': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'completed': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+
+
+
+class InvoiceForm(forms.ModelForm):
+    class Meta:
+        model = Invoice
+        fields = ['project', 'total_cost', 'due_date', 'paid']
+        widgets = {
+            'project': forms.Select(attrs={'class': 'form-select'}),
+            'total_cost': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Total cost (KSh)'}),
+            'due_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'paid': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }

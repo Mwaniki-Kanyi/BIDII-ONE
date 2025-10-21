@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Invoices</h2>
+  <a href="{% url 'core:invoice_add' %}" class="btn btn-primary mb-3">Add Invoice</a>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Customer</th><th>Project</th><th>Total (KSh)</th><th>Due Date</th><th>Status</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for invoice in invoices %}
+      <tr>
+        <td>{{ invoice.project.estimate.customer.name }}</td>
+        <td>{{ invoice.project.estimate.outline|truncatechars:40 }}</td>
+        <td>{{ invoice.total_cost }}</td>
+        <td>{{ invoice.due_date|date:"M d, Y" }}</td>
+        <td>
+          {% if invoice.paid %}
+            <span class="badge bg-success">Paid</span>
+          {% elif invoice.due_date < today %}
+            <span class="badge bg-danger">Overdue</span>
+          {% else %}
+            <span class="badge bg-warning text-dark">Pending</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'core:invoice_edit' invoice.id %}" class="btn btn-sm btn-warning">Edit</a>
+          <a href="{% url 'core:invoice_delete' invoice.id %}" class="btn btn-sm btn-danger">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6">No invoices found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
