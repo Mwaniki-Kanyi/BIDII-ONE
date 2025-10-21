@@ -30,6 +30,9 @@ urlpatterns = [
     path('invoices/add/', views.InvoiceCreateView.as_view(), name='invoice_add'),
     path('invoices/<int:pk>/edit/', views.InvoiceUpdateView.as_view(), name='invoice_edit'),
     path('invoices/<int:pk>/delete/', views.InvoiceDeleteView.as_view(), name='invoice_delete'),
+    # Dashboard route
+    path('dashboard/', views.dashboard_view, name='dashboard'),
+
 
 
 ]

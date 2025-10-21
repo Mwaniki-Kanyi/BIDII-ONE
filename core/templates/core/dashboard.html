@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">Bidii Quality Builders Analytics Dashboard</h2>
+
+  <div class="row text-center">
+    <div class="col-md-6 mb-4">
+      <div class="card p-3 shadow">
+        <h5>Monthly Revenue</h5>
+        <img src="data:image/png;base64,{{ chart1 }}" class="img-fluid rounded" />
+      </div>
+    </div>
+    <div class="col-md-6 mb-4">
+      <div class="card p-3 shadow">
+        <h5>Project Completion Rate</h5>
+        <img src="data:image/png;base64,{{ chart2 }}" class="img-fluid rounded" />
+      </div>
+    </div>
+    <div class="col-md-6 mb-4">
+      <div class="card p-3 shadow">
+        <h5>Invoice Payment Status</h5>
+        <img src="data:image/png;base64,{{ chart3 }}" class="img-fluid rounded" />
+      </div>
+    </div>
+    <div class="col-md-6 mb-4">
+      <div class="card p-3 shadow">
+        <h5>Worker Distribution by Role</h5>
+        <img src="data:image/png;base64,{{ chart4 }}" class="img-fluid rounded" />
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

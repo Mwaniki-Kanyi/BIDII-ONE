@@ -3,6 +3,9 @@ import matplotlib
 matplotlib.use('Agg')  # use non-GUI backend
 import matplotlib.pyplot as plt
 import io
+import base64
+from django.db.models import Count, Sum, Q
+from datetime import timedelta
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Project, Customer, Estimate, Worker, Invoice
@@ -124,6 +127,80 @@ class InvoiceListView(ListView):
         context['today'] = date.today()
         return context
 
+
+def dashboard_view(request):
+    """Renders an analytics dashboard with charts."""
+    today = timezone.now().date()
+
+    # --- 1️⃣ Revenue over last 6 months ---
+    months, revenues = [], []
+    for i in range(5, -1, -1):
+        month = (today.replace(day=1) - timedelta(days=30 * i)).strftime("%b")
+        start = today.replace(day=1) - timedelta(days=30 * i)
+        end = start + timedelta(days=30)
+        total = Invoice.objects.filter(created_at__range=(start, end)).aggregate(
+            Sum('total_cost')
+        )['total_cost__sum'] or 0
+        months.append(month)
+        revenues.append(total)
+
+    fig1, ax1 = plt.subplots()
+    ax1.bar(months, revenues)
+    ax1.set_title("Monthly Revenue (KSh)")
+    ax1.set_xlabel("Month")
+    ax1.set_ylabel("Total Revenue")
+
+    # --- 2️⃣ Job completion rate ---
+    total_projects = Project.objects.count()
+    completed = Project.objects.filter(completed=True).count()
+    pending = total_projects - completed
+
+    fig2, ax2 = plt.subplots()
+    ax2.pie(
+        [completed, pending],
+        labels=['Completed', 'Ongoing'],
+        autopct='%1.1f%%',
+        startangle=140,
+        colors=['#28a745', '#ffc107']
+    )
+    ax2.set_title("Project Completion Rate")
+
+    # --- 3️⃣ Payment status overview ---
+    paid = Invoice.objects.filter(paid=True).count()
+    unpaid = Invoice.objects.filter(paid=False).count()
+
+    fig3, ax3 = plt.subplots()
+    ax3.bar(['Paid', 'Unpaid'], [paid, unpaid], color=['#198754', '#dc3545'])
+    ax3.set_title("Invoice Payment Status")
+    ax3.set_ylabel("Count")
+
+    # --- 4️⃣ Worker distribution ---
+    worker_roles = (
+        Worker.objects.values('role').annotate(total=Count('id')).order_by('role')
+    )
+    roles = [w['role'].capitalize() for w in worker_roles]
+    counts = [w['total'] for w in worker_roles]
+
+    fig4, ax4 = plt.subplots()
+    ax4.barh(roles, counts, color='#0d6efd')
+    ax4.set_title("Worker Distribution by Role")
+
+    # --- Helper: Convert all figures to base64 strings ---
+    def fig_to_base64(fig):
+        buf = io.BytesIO()
+        fig.savefig(buf, format='png', bbox_inches='tight')
+        plt.close(fig)
+        buf.seek(0)
+        return base64.b64encode(buf.getvalue()).decode('utf-8')
+
+    context = {
+        'chart1': fig_to_base64(fig1),
+        'chart2': fig_to_base64(fig2),
+        'chart3': fig_to_base64(fig3),
+        'chart4': fig_to_base64(fig4),
+    }
+
+    return render(request, 'core/dashboard.html', context)
 
 
 
