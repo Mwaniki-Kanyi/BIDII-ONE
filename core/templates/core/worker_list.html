@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Workers</h2>
+  <a href="{% url 'core:worker_add' %}" class="btn btn-primary mb-3">Add Worker</a>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Name</th><th>Role</th><th>Phone</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for worker in workers %}
+      <tr>
+        <td>{{ worker.name }}</td>
+        <td>{{ worker.get_role_display }}</td>
+        <td>{{ worker.phone }}</td>
+        <td>
+          <a href="{% url 'core:worker_edit' worker.id %}" class="btn btn-sm btn-warning">Edit</a>
+          <a href="{% url 'core:worker_delete' worker.id %}" class="btn btn-sm btn-danger">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">No workers available.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

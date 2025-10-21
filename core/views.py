@@ -12,6 +12,8 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .forms import CustomerForm
 from .models import Customer
+from .models import Worker
+from .forms import WorkerForm
 
 def home(request):
     return render(request, "core/home.html")
@@ -20,15 +22,11 @@ class CustomerListView(ListView):
     model = Customer
     template_name = 'core/customer_list.html'
     context_object_name = 'customers'
-
-
 class CustomerCreateView(CreateView):
     model = Customer
     form_class = CustomerForm
     template_name = 'core/customer_form.html'
     success_url = reverse_lazy('core:customer_list')
-
-
 class CustomerUpdateView(UpdateView):
     model = Customer
     form_class = CustomerForm
@@ -38,6 +36,26 @@ class CustomerDeleteView(DeleteView):
     model = Customer
     template_name = 'core/customer_confirm_delete.html'
     success_url = reverse_lazy('core:customer_list')
+    
+class WorkerListView(ListView):
+    model = Worker
+    template_name = 'core/worker_list.html'
+    context_object_name = 'workers'
+class WorkerCreateView(CreateView):
+    model = Worker
+    form_class = WorkerForm
+    template_name = 'core/worker_form.html'
+    success_url = reverse_lazy('core:worker_list')
+class WorkerUpdateView(UpdateView):
+    model = Worker
+    form_class = WorkerForm
+    template_name = 'core/worker_form.html'
+    success_url = reverse_lazy('core:worker_list')
+class WorkerDeleteView(DeleteView):
+    model = Worker
+    template_name = 'core/worker_confirm_delete.html'
+    success_url = reverse_lazy('core:worker_list')
+
 
 def dashboard_plot(request):
     # Example: jobs completed per month (last 6 months)
