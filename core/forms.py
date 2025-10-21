@@ -1,6 +1,8 @@
 from django import forms
 from .models import Customer
 from .models import Worker
+from .models import Estimate
+from .models import Project
 
 class CustomerForm(forms.ModelForm):
     class Meta:
@@ -23,7 +25,6 @@ class WorkerForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
         }
 
-from .models import Estimate
 
 class EstimateForm(forms.ModelForm):
     class Meta:
@@ -36,4 +37,17 @@ class EstimateForm(forms.ModelForm):
             'visit_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'amount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Estimated cost (KSh)'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
+        }
+
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = ['estimate', 'start_date', 'end_date', 'workers', 'materials_ordered', 'completed']
+        widgets = {
+            'estimate': forms.Select(attrs={'class': 'form-select'}),
+            'start_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'workers': forms.SelectMultiple(attrs={'class': 'form-select'}),
+            'materials_ordered': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'completed': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }

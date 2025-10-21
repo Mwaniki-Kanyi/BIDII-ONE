@@ -5,13 +5,12 @@ import matplotlib.pyplot as plt
 import io
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Project, Invoice
+from .models import Project, Customer, Estimate, Worker, Invoice
 from django.utils import timezone
 from datetime import date, timedelta
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .forms import CustomerForm, WorkerForm, EstimateForm
-from .models import Customer, Estimate, Worker
+from .forms import CustomerForm, WorkerForm, EstimateForm, ProjectForm
 
 def home(request):
     return render(request, "core/home.html")
@@ -76,6 +75,25 @@ class EstimateDeleteView(DeleteView):
     template_name = 'core/estimate_confirm_delete.html'
     success_url = reverse_lazy('core:estimate_list')
 
+
+class ProjectListView(ListView):
+    model = Project
+    template_name = 'core/project_list.html'
+    context_object_name = 'projects'
+class ProjectCreateView(CreateView):
+    model = Project
+    form_class = ProjectForm
+    template_name = 'core/project_form.html'
+    success_url = reverse_lazy('core:project_list')
+class ProjectUpdateView(UpdateView):
+    model = Project
+    form_class = ProjectForm
+    template_name = 'core/project_form.html'
+    success_url = reverse_lazy('core:project_list')
+class ProjectDeleteView(DeleteView):
+    model = Project
+    template_name = 'core/project_confirm_delete.html'
+    success_url = reverse_lazy('core:project_list')
 
 
 def dashboard_plot(request):

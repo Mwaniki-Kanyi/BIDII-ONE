@@ -20,5 +20,10 @@ urlpatterns = [
     path('estimates/add/', views.EstimateCreateView.as_view(), name='estimate_add'),
     path('estimates/<int:pk>/edit/', views.EstimateUpdateView.as_view(), name='estimate_edit'),
     path('estimates/<int:pk>/delete/', views.EstimateDeleteView.as_view(), name='estimate_delete'),
+    # Project CRUD routes
+    path('projects/', views.ProjectListView.as_view(), name='project_list'),
+    path('projects/add/', views.ProjectCreateView.as_view(), name='project_add'),
+    path('projects/<int:pk>/edit/', views.ProjectUpdateView.as_view(), name='project_edit'),
+    path('projects/<int:pk>/delete/', views.ProjectDeleteView.as_view(), name='project_delete'),
 
 ]
