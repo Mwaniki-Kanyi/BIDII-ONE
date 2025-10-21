@@ -1,16 +1,43 @@
 # Create your views here.
-from django.shortcuts import render
-from django.http import HttpResponse
 import matplotlib
 matplotlib.use('Agg')  # use non-GUI backend
 import matplotlib.pyplot as plt
 import io
+from django.shortcuts import render
+from django.http import HttpResponse
 from .models import Project, Invoice
 from django.utils import timezone
 from datetime import date, timedelta
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .forms import CustomerForm
+from .models import Customer
 
 def home(request):
     return render(request, "core/home.html")
+
+class CustomerListView(ListView):
+    model = Customer
+    template_name = 'core/customer_list.html'
+    context_object_name = 'customers'
+
+
+class CustomerCreateView(CreateView):
+    model = Customer
+    form_class = CustomerForm
+    template_name = 'core/customer_form.html'
+    success_url = reverse_lazy('core:customer_list')
+
+
+class CustomerUpdateView(UpdateView):
+    model = Customer
+    form_class = CustomerForm
+    template_name = 'core/customer_form.html'
+    success_url = reverse_lazy('core:customer_list')
+class CustomerDeleteView(DeleteView):
+    model = Customer
+    template_name = 'core/customer_confirm_delete.html'
+    success_url = reverse_lazy('core:customer_list')
 
 def dashboard_plot(request):
     # Example: jobs completed per month (last 6 months)
