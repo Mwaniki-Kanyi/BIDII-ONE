@@ -22,3 +22,18 @@ class WorkerForm(forms.ModelForm):
             'role': forms.Select(attrs={'class': 'form-select'}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
         }
+
+from .models import Estimate
+
+class EstimateForm(forms.ModelForm):
+    class Meta:
+        model = Estimate
+        fields = ['customer', 'outline', 'detailed_description', 'visit_date', 'amount', 'status']
+        widgets = {
+            'customer': forms.Select(attrs={'class': 'form-select'}),
+            'outline': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Brief outline of proposed work'}),
+            'detailed_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Detailed work description'}),
+            'visit_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Estimated cost (KSh)'}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+        }

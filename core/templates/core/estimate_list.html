@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Estimates</h2>
+  <a href="{% url 'core:estimate_add' %}" class="btn btn-primary mb-3">Add Estimate</a>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Customer</th><th>Outline</th><th>Visit Date</th><th>Amount (KSh)</th><th>Status</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for estimate in estimates %}
+      <tr>
+        <td>{{ estimate.customer.name }}</td>
+        <td>{{ estimate.outline|truncatechars:50 }}</td>
+        <td>{{ estimate.visit_date|date:"M d, Y" }}</td>
+        <td>{{ estimate.amount }}</td>
+        <td>
+          {% if estimate.status == 'approved' %}
+            <span class="badge bg-success">Approved</span>
+          {% elif estimate.status == 'rejected' %}
+            <span class="badge bg-danger">Rejected</span>
+          {% else %}
+            <span class="badge bg-warning text-dark">Pending</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'core:estimate_edit' estimate.id %}" class="btn btn-sm btn-warning">Edit</a>
+          <a href="{% url 'core:estimate_delete' estimate.id %}" class="btn btn-sm btn-danger">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6">No estimates available.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

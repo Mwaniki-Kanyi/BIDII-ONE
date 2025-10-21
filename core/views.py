@@ -10,10 +10,8 @@ from django.utils import timezone
 from datetime import date, timedelta
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .forms import CustomerForm
-from .models import Customer
-from .models import Worker
-from .forms import WorkerForm
+from .forms import CustomerForm, WorkerForm, EstimateForm
+from .models import Customer, Estimate, Worker
 
 def home(request):
     return render(request, "core/home.html")
@@ -37,6 +35,8 @@ class CustomerDeleteView(DeleteView):
     template_name = 'core/customer_confirm_delete.html'
     success_url = reverse_lazy('core:customer_list')
     
+    
+    
 class WorkerListView(ListView):
     model = Worker
     template_name = 'core/worker_list.html'
@@ -55,6 +55,27 @@ class WorkerDeleteView(DeleteView):
     model = Worker
     template_name = 'core/worker_confirm_delete.html'
     success_url = reverse_lazy('core:worker_list')
+    
+    
+class EstimateListView(ListView):
+    model = Estimate
+    template_name = 'core/estimate_list.html'
+    context_object_name = 'estimates'
+class EstimateCreateView(CreateView):
+    model = Estimate
+    form_class = EstimateForm
+    template_name = 'core/estimate_form.html'
+    success_url = reverse_lazy('core:estimate_list')
+class EstimateUpdateView(UpdateView):
+    model = Estimate
+    form_class = EstimateForm
+    template_name = 'core/estimate_form.html'
+    success_url = reverse_lazy('core:estimate_list')
+class EstimateDeleteView(DeleteView):
+    model = Estimate
+    template_name = 'core/estimate_confirm_delete.html'
+    success_url = reverse_lazy('core:estimate_list')
+
 
 
 def dashboard_plot(request):
